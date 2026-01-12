@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>VOID RUNNER</title>
 
-  <!-- IMPORTANT: prevents mobile / desktop scaling issues -->
+  <!-- Prevent mobile/desktop scaling issues -->
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no">
 
   <link rel="stylesheet" href="style.css" />
@@ -17,7 +17,7 @@
     <!-- CANVAS -->
     <canvas id="game"></canvas>
 
-    <!-- IN-GAME UI (TOP LEFT) -->
+    <!-- IN-GAME UI -->
     <div class="ui">
       <span id="score">Score: 0</span>
       <span id="time">Time: 0.0s</span>
@@ -25,24 +25,38 @@
       <span id="combo">Combo: x1</span>
     </div>
 
-    <!-- CONTROLS HINT (BOTTOM CENTER) -->
+    <!-- CONTROLS HINT -->
     <div class="hint">
       VOID RUNNER · Move: Arrows · Dash: Space · Pause: ESC
     </div>
 
-    <!-- GAME OVER OVERLAY (HIDDEN UNTIL TRIGGERED) -->
+    <!-- GAME OVER OVERLAY -->
     <div id="gameOver" class="overlay hidden">
       <div class="panel">
         <h1>GAME OVER</h1>
         <p id="finalScore">Score: 0</p>
         <p id="bestScore">Best: 0</p>
         <button id="restartBtn">Restart</button>
+
+        <div class="share-buttons">
+          <button id="shareTwitter">Share on X</button>
+          <button id="shareFacebook">Share on Facebook</button>
+          <button id="shareCopy">Copy Link</button>
+        </div>
+        <div id="shareMessage" class="share-message"></div>
       </div>
+    </div>
+
+    <!-- AUTHENTICITY BADGE -->
+    <div id="authBadge" class="auth-badge hidden">
+      VOID RUNNER ✅ Verified by Creator
     </div>
 
   </div>
 
-  <!-- GAME SCRIPT -->
+  <!-- GAME SCRIPTS -->
   <script src="main.js"></script>
+  <script src="share.js"></script>
+  <script src="AUTHENTICITY.js"></script>
 </body>
 </html>

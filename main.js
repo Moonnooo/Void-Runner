@@ -12,13 +12,7 @@ const BASE_H = 180;
    RESIZE (PIXEL PERFECT)
 ========================= */
 function resize() {
-  const scale = Math.floor(
-    Math.min(
-      window.innerWidth / BASE_W,
-      window.innerHeight / BASE_H
-    )
-  ) || 1;
-
+  const scale = Math.floor(Math.min(window.innerWidth / BASE_W, window.innerHeight / BASE_H)) || 1;
   canvas.width = BASE_W;
   canvas.height = BASE_H;
   canvas.style.width = BASE_W * scale + "px";
@@ -35,10 +29,7 @@ let paused = false;
 
 addEventListener("keydown", e => {
   keys[e.code] = true;
-
-  if (e.code === "Escape") {
-    paused = !paused;
-  }
+  if (e.code === "Escape") paused = !paused;
 });
 
 addEventListener("keyup", e => {
@@ -46,7 +37,7 @@ addEventListener("keyup", e => {
 });
 
 /* =========================
-   UI
+   UI ELEMENTS
 ========================= */
 const scoreEl = document.getElementById("score");
 const timeEl = document.getElementById("time");
@@ -77,10 +68,7 @@ let gameOver = false;
    CAMERA
 ========================= */
 const camera = { shake: 0 };
-
-function addShake(v) {
-  camera.shake = Math.min(camera.shake + v, 3);
-}
+function addShake(v) { camera.shake = Math.min(camera.shake + v, 3); }
 
 /* =========================
    PLAYER
@@ -99,7 +87,6 @@ const player = {
    ENEMIES
 ========================= */
 const enemies = [];
-
 function spawnEnemy() {
   enemies.push({
     x: Math.random() * BASE_W,
@@ -113,12 +100,10 @@ function spawnEnemy() {
    PARTICLES
 ========================= */
 const particles = [];
-
 function burst(x, y, n = 12) {
   for (let i = 0; i < n; i++) {
     particles.push({
-      x,
-      y,
+      x, y,
       vx: (Math.random() - 0.5) * 90,
       vy: (Math.random() - 0.5) * 90,
       life: 0.6
@@ -127,7 +112,7 @@ function burst(x, y, n = 12) {
 }
 
 /* =========================
-   MAIN LOOP
+   GAME LOOP
 ========================= */
 let last = 0;
 let spawnTimer = 0;
@@ -137,7 +122,7 @@ function update(dt) {
 
   timeAlive += dt;
 
-  /* ---------- PLAYER MOVE ---------- */
+  // PLAYER MOVE
   let dx = 0, dy = 0;
   if (keys["ArrowLeft"]) dx--;
   if (keys["ArrowRight"]) dx++;
@@ -154,60 +139,51 @@ function update(dt) {
   const len = Math.hypot(dx, dy) || 1;
   player.x += (dx / len) * speed * dt;
   player.y += (dy / len) * speed * dt;
-
   player.dashCd -= dt;
   player.invuln -= dt;
-
   player.x = Math.max(0, Math.min(BASE_W, player.x));
   player.y = Math.max(0, Math.min(BASE_H, player.y));
 
-  /* ---------- ENEMIES ---------- */
+  // ENEMIES
   for (let e of enemies) {
     const ex = player.x - e.x;
     const ey = player.y - e.y;
     const d = Math.hypot(ex, ey) || 1;
-
     e.x += (ex / d) * e.speed * dt;
     e.y += (ey / d) * e.speed * dt;
 
     if (d < e.r + player.r && player.invuln <= 0) {
       player.hp -= 15;
       player.invuln = 0.6;
-
       combo = 1;
       comboTimer = 0;
       comboStreak = 0;
-
       addShake(3);
       burst(player.x, player.y);
     }
   }
 
-  /* ---------- COMBO SYSTEM ---------- */
+  // COMBO SYSTEM
   comboStreak += dt;
-
   if (comboStreak >= 1) {
     combo++;
     comboTimer = 1.5;
     comboStreak = 0;
   }
-
   comboTimer -= dt;
-  if (comboTimer <= 0) {
-    combo = 1;
-  }
+  if (comboTimer <= 0) combo = 1;
 
-  /* ---------- SCORE ---------- */
+  // SCORE
   score += dt * 120 * combo;
 
-  /* ---------- SPAWNING ---------- */
+  // SPAWNING
   spawnTimer -= dt;
   if (spawnTimer <= 0) {
     spawnEnemy();
     spawnTimer = Math.max(0.6, 2 - enemies.length * 0.1);
   }
 
-  /* ---------- PARTICLES ---------- */
+  // PARTICLES
   for (let i = particles.length - 1; i >= 0; i--) {
     const p = particles[i];
     p.life -= dt;
@@ -216,11 +192,11 @@ function update(dt) {
     if (p.life <= 0) particles.splice(i, 1);
   }
 
-  /* ---------- CAMERA ---------- */
+  // CAMERA
   camera.shake *= 0.7;
   if (camera.shake < 0.05) camera.shake = 0;
 
-  /* ---------- UI ---------- */
+  // UI
   scoreEl.textContent = "Score: " + formatScore(score);
   timeEl.textContent = "Time: " + timeAlive.toFixed(1) + "s";
   comboEl.textContent = "Combo: x" + combo;
@@ -234,23 +210,17 @@ function update(dt) {
 ========================= */
 function endGame() {
   gameOver = true;
-
   const overlay = document.getElementById("gameOver");
   overlay.classList.remove("hidden");
 
-  const best = Math.max(
-    Number(localStorage.bestScore || 0),
-    Math.floor(score)
-  );
-
+  const best = Math.max(Number(localStorage.bestScore || 0), Math.floor(score));
   localStorage.bestScore = best;
 
-  document.getElementById("finalScore").textContent =
-    "Score: " + formatScore(score);
-  document.getElementById("bestScore").textContent =
-    "Best: " + formatScore(best);
+  document.getElementById("finalScore").textContent = "Score: " + formatScore(score);
+  document.getElementById("bestScore").textContent = "Best: " + formatScore(best);
 }
 
+/* RESTART */
 document.getElementById("restartBtn").onclick = () => location.reload();
 
 /* =========================
@@ -260,48 +230,46 @@ function render() {
   const sx = (Math.random() * 2 - 1) * camera.shake;
   const sy = (Math.random() * 2 - 1) * camera.shake;
 
-  ctx.setTransform(1, 0, 0, 1, sx, sy);
-  ctx.clearRect(-20, -20, BASE_W + 40, BASE_H + 40);
+  ctx.setTransform(1,0,0,1,sx,sy);
+  ctx.clearRect(-20,-20,BASE_W+40,BASE_H+40);
 
-  /* PLAYER */
+  // PLAYER
   ctx.fillStyle = "#00ff99";
   ctx.beginPath();
-  ctx.arc(player.x, player.y, player.r, 0, Math.PI * 2);
+  ctx.arc(player.x, player.y, player.r, 0, Math.PI*2);
   ctx.fill();
 
-  /* ENEMIES */
+  // ENEMIES
   ctx.fillStyle = "#ff3355";
   for (let e of enemies) {
     ctx.beginPath();
-    ctx.arc(e.x, e.y, e.r, 0, Math.PI * 2);
+    ctx.arc(e.x, e.y, e.r, 0, Math.PI*2);
     ctx.fill();
   }
 
-  /* PARTICLES */
+  // PARTICLES
   ctx.fillStyle = "#ffffff";
-  for (let p of particles) {
-    ctx.fillRect(p.x, p.y, 1, 1);
-  }
+  for (let p of particles) ctx.fillRect(p.x,p.y,1,1);
 
-  /* PAUSE OVERLAY */
+  // PAUSE OVERLAY
   if (paused) {
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.setTransform(1,0,0,1,0,0);
     ctx.fillStyle = "rgba(0,0,0,0.6)";
-    ctx.fillRect(0, 0, BASE_W, BASE_H);
+    ctx.fillRect(0,0,BASE_W,BASE_H);
     ctx.fillStyle = "#ffffff";
     ctx.textAlign = "center";
     ctx.font = "16px monospace";
-    ctx.fillText("PAUSED", BASE_W / 2, BASE_H / 2);
+    ctx.fillText("PAUSED", BASE_W/2, BASE_H/2);
   }
 
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.setTransform(1,0,0,1,0,0);
 }
 
 /* =========================
    LOOP
 ========================= */
 function loop(t) {
-  const dt = (t - last) / 1000;
+  const dt = (t - last)/1000;
   last = t;
   update(dt);
   render();
@@ -309,3 +277,33 @@ function loop(t) {
 }
 
 requestAnimationFrame(loop);
+
+/* =========================
+   AUTH BADGE (bottom-right with GitHub link)
+========================= */
+(function createAuthBadge() {
+  const badge = document.createElement("div");
+  badge.className = "auth-badge";
+
+  // Create text node for "VOID RUNNER © "
+  const text = document.createTextNode("VOID RUNNER © ");
+
+  // Create link for username
+  const link = document.createElement("a");
+  link.href = "https://github.com/Moonnooo"; // GitHub URL
+  link.target = "_blank";
+  link.textContent = "Moonnooo";             // username displayed
+  link.style.color = "#000";                 // match badge text
+  link.style.textDecoration = "underline";   // optional
+  link.style.fontWeight = "bold";
+
+  // Create text node for version
+  const versionText = document.createTextNode(" v1.1");
+
+  // Append nodes
+  badge.appendChild(text);
+  badge.appendChild(link);
+  badge.appendChild(versionText);
+
+  document.body.appendChild(badge);
+})();
