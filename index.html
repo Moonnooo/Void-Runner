@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>VOID RUNNER</title>
+
+  <!-- IMPORTANT: prevents mobile / desktop scaling issues -->
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no">
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <!-- GAME CONTAINER -->
+  <div id="gameContainer">
+
+    <!-- CANVAS -->
+    <canvas id="game"></canvas>
+
+    <!-- IN-GAME UI (TOP LEFT) -->
+    <div class="ui">
+      <span id="score">Score: 0</span>
+      <span id="time">Time: 0.0s</span>
+      <span id="hp">HP: 100</span>
+      <span id="combo">Combo: x1</span>
+    </div>
+
+    <!-- CONTROLS HINT (BOTTOM CENTER) -->
+    <div class="hint">
+      VOID RUNNER · Move: Arrows · Dash: Space · Pause: ESC
+    </div>
+
+    <!-- GAME OVER OVERLAY (HIDDEN UNTIL TRIGGERED) -->
+    <div id="gameOver" class="overlay hidden">
+      <div class="panel">
+        <h1>GAME OVER</h1>
+        <p id="finalScore">Score: 0</p>
+        <p id="bestScore">Best: 0</p>
+        <button id="restartBtn">Restart</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- GAME SCRIPT -->
+  <script src="main.js"></script>
+</body>
+</html>
