@@ -1,0 +1,136 @@
+/* =========================
+   GLOBAL RESET & BASE
+========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Press Start 2P', monospace; /* retro font, fallback monospace */
+  background-color: #111; /* dark background */
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+}
+
+/* Optional: include Google font */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+/* =========================
+   HOME CONTAINER
+========================= */
+#homeContainer {
+  background-color: #222;
+  border: 4px solid #00ff99; /* match player color */
+  border-radius: 12px;
+  padding: 40px 60px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 0 20px #00ff99aa;
+}
+
+/* =========================
+   TITLE
+========================= */
+#homeContainer h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #00ff99;
+  text-shadow: 0 0 6px #00ff99aa;
+}
+
+/* =========================
+   DESCRIPTION
+========================= */
+#homeContainer p {
+  font-size: 10px;
+  margin-bottom: 30px;
+  color: #ccc;
+}
+
+/* =========================
+   MODE BUTTONS
+========================= */
+.mode-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mode-buttons button {
+  flex: 1;
+  padding: 12px 0;
+  background-color: #333;
+  border: 2px solid #00ff99;
+  border-radius: 8px;
+  color: #fff;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+}
+
+/* Hover/active effects for enabled buttons */
+.mode-buttons button:hover:not(:disabled) {
+  background-color: #00ff99;
+  color: #111;
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #00ff99aa;
+}
+
+.mode-buttons button:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+/* Disabled button */
+.mode-buttons button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: #888;
+  color: #aaa;
+  background-color: #222;
+  box-shadow: none;
+}
+
+/* =========================
+   OFFLINE MESSAGE
+========================= */
+#offlineMessage {
+  display: none;
+  color: #ff5555;
+  margin-top: 20px;
+  font-size: 8px;
+  font-weight: bold;
+  text-shadow: 0 0 5px #ff5555aa;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 400px) {
+  #homeContainer {
+    padding: 30px 20px;
+  }
+
+  #homeContainer h1 {
+    font-size: 18px;
+  }
+
+  #homeContainer p {
+    font-size: 8px;
+  }
+
+  .mode-buttons button {
+    font-size: 7px;
+  }
+
+  #offlineMessage {
+    font-size: 7px;
+  }
+}
