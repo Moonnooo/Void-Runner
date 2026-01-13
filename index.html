@@ -2,61 +2,64 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>VOID RUNNER</title>
-
-  <!-- Prevent mobile/desktop scaling issues -->
-  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no">
-
-  <link rel="stylesheet" href="style.css" />
+  <title>VOID RUNNER · Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="index.css" />
 </head>
-
 <body>
-  <!-- GAME CONTAINER -->
-  <div id="gameContainer">
+  <div id="homeContainer">
+    <h1>VOID RUNNER</h1>
+    <p>Select Game Mode</p>
 
-    <!-- CANVAS -->
-    <canvas id="game"></canvas>
-
-    <!-- IN-GAME UI -->
-    <div class="ui">
-      <span id="score">Score: 0</span>
-      <span id="time">Time: 0.0s</span>
-      <span id="hp">HP: 100</span>
-      <span id="combo">Combo: x1</span>
+    <div class="mode-buttons">
+      <button id="singlePlayerBtn">Single Player</button>
+      <button id="multiPlayerBtn" disabled>Multiplayer</button>
     </div>
 
-    <!-- CONTROLS HINT -->
-    <div class="hint">
-      VOID RUNNER · Move: Arrows · Dash: Space · Pause: ESC
-    </div>
-
-    <!-- GAME OVER OVERLAY -->
-    <div id="gameOver" class="overlay hidden">
-      <div class="panel">
-        <h1>GAME OVER</h1>
-        <p id="finalScore">Score: 0</p>
-        <p id="bestScore">Best: 0</p>
-        <button id="restartBtn">Restart</button>
-
-        <div class="share-buttons">
-          <button id="shareTwitter">Share on X</button>
-          <button id="shareFacebook">Share on Facebook</button>
-          <button id="shareCopy">Copy Link</button>
-        </div>
-        <div id="shareMessage" class="share-message"></div>
-      </div>
-    </div>
-
-    <!-- AUTHENTICITY BADGE -->
-    <div id="authBadge" class="auth-badge hidden">
-      VOID RUNNER ✅ Verified by Creator
-    </div>
-
+    <div id="offlineMessage">⚠ Multiplayer server is offline. Multiplayer disabled.</div>
   </div>
 
-  <!-- GAME SCRIPTS -->
-  <script src="main.js"></script>
-  <script src="share.js"></script>
-  <script src="AUTHENTICITY.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const singleBtn = document.getElementById("singlePlayerBtn");
+    const multiBtn = document.getElementById("multiPlayerBtn");
+    const offlineMessage = document.getElementById("offlineMessage");
+
+    // Single player always works
+    singleBtn.onclick = () => {
+      localStorage.setItem("gameMode", "single");
+      window.location.href = "game.html";
+    };
+
+    // Try connecting to the multiplayer server
+    const socket = io({ timeout: 3000 });
+
+    socket.on("connect", () => {
+      // Multiplayer server online, enable button
+      multiBtn.disabled = false;
+      multiBtn.title = "Join Multiplayer Lobby";
+      offlineMessage.style.display = "none";
+
+      // Disconnect for now, will reconnect in lobby
+      socket.disconnect();
+    });
+
+    socket.on("connect_error", disableMultiplayer);
+    socket.on("connect_timeout", disableMultiplayer);
+
+    function disableMultiplayer() {
+      multiBtn.disabled = true;
+      multiBtn.title = "Server Offline";
+      offlineMessage.style.display = "block";
+    }
+
+    // Multiplayer button click
+    multiBtn.onclick = () => {
+      if (multiBtn.disabled) return;
+
+      localStorage.setItem("gameMode", "multi");
+      window.location.href = "lobby.html"; // go to multiplayer lobby
+    };
+  </script>
 </body>
 </html>

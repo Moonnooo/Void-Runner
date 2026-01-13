@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>VOID RUNNER</title>
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="gameContainer">
+
+    <canvas id="game"></canvas>
+
+    <!-- =========================
+         GAME STATS
+    ========================== -->
+    <div class="ui">
+      <span id="score">Score: 0</span>
+      <span id="time">Time: 0.0s</span>
+      <span id="hp">HP: 100</span>
+      <span id="combo">Combo: x1</span>
+    </div>
+
+    <!-- =========================
+         CONTROLS HINT
+    ========================== -->
+    <div class="hint">
+      <strong>Controls:</strong> Move: Arrows · Dash: Space · Pause: ESC · Switch: C (Keyboard/Mouse) · Use Perk: 1–4
+    </div>
+
+    <!-- =========================
+         PERK LEGEND
+    ========================== -->
+    <div class="perk-legend">
+      <strong>Perks:</strong>
+      <span class="perk" style="color:#00ffff;">HP: Health</span>
+      <span class="perk" style="color:#ffff00;">SH: Shield</span>
+      <span class="perk" style="color:#ff00ff;">ST: Stun</span>
+      <span class="perk" style="color:#ff9900;">SP: Speed</span>
+    </div>
+
+    <!-- =========================
+         GAME OVER PANEL
+    ========================== -->
+    <div id="gameOver" class="overlay hidden">
+      <div class="panel">
+        <h1>GAME OVER</h1>
+        <p id="finalScore">Score: 0</p>
+        <p id="bestScore">Best: 0</p>
+        <button id="restartBtn">Restart</button>
+        <div class="share-buttons">
+          <button id="shareTwitter">Share on X</button>
+          <button id="shareFacebook">Share on Facebook</button>
+          <button id="shareCopy">Copy Link</button>
+        </div>
+        <div id="shareMessage" class="share-message"></div>
+      </div>
+    </div>
+
+    <!-- =========================
+         AUTH BADGE
+    ========================== -->
+    <div id="authBadge" class="auth-badge hidden">
+      VOID RUNNER ✅ Verified by Creator
+    </div>
+
+  </div>
+
+  <script src="main.js"></script>
+  <script src="share.js"></script>
+  <script src="../AUTHENTICITY.js"></script>
+</body>
+</html>
